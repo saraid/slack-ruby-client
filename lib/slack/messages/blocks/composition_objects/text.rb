@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Slack
   module Messages
     module Blocks
@@ -10,8 +12,9 @@ module Slack
 
           def self.[](hash)
             new.tap do |object|
-              object.type = hash.keys.find { |key| key == PLAINTEXT || key == MRKDWN }
+              object.type = hash.keys.find { |key| [PLAINTEXT, MRKDWN].include?(key) }
               raise ArgumentError, 'type must be `plain_text` or `mrkdwn`' unless object.type
+
               object.text = hash[object.type]
             end
           end
@@ -21,22 +24,25 @@ module Slack
           end
 
           def type=(type)
-            raise ArgumentError, 'type must be `plain_text` or `mrkdwn`' unless %i( plain_text mrkdwn ).include?(type.to_sym)
+            unless [PLAINTEXT, MRKDWN].include?(type.to_sym)
+              raise ArgumentError, 'type must be `plain_text` or `mrkdwn`'
+            end
+
             @type = type.to_sym
           end
 
           NEWLINE = "\n"
 
           def text=(text)
-            text = text.join(NEWLINE) if text.kind_of?(Array)
+            text = text.join(NEWLINE) if text.is_a?(Array)
             raise TypeError, 'text must be a string' unless text.respond_to?(:to_str)
+
             @text = text.to_s
           end
 
           def to_h
             { type: type,
-              text: text
-            }
+              text: text }
           end
         end
       end

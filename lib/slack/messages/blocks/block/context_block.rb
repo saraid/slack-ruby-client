@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Slack
   module Messages
     module Blocks
@@ -9,7 +11,6 @@ module Slack
           def self.[](hash)
             new.tap do |object|
               hash[:elements].each(&object.elements.method(:<<))
-            end.tap do |object|
               raise ArgumentError, 'invalid ContextBlock' unless object.valid?
             end
           end
@@ -23,9 +24,9 @@ module Slack
           end
 
           def to_h
-            super.merge({
+            super.merge(
               elements: elements.map(&:to_h)
-            }).reject { |_, v| v.nil? || v.empty? }
+            ).reject { |_, v| v.nil? || v.empty? }
           end
         end
       end

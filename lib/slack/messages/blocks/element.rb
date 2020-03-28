@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Slack
   module Messages
     module Blocks
@@ -10,3 +12,5 @@ module Slack
     end
   end
 end
+
+require_relative 'element/image_element'

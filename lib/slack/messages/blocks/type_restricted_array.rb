@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Slack
   module Messages
     module Blocks
@@ -9,7 +11,10 @@ module Slack
         end
 
         def <<(item)
-          raise TypeError, "#{self.class} only accepts #{@classes}" unless @classes.any? { |cls| item.kind_of?(cls) }
+          unless @classes.any? { |cls| item.is_a?(cls) }
+            raise TypeError, "#{self.class} only accepts #{@classes}"
+          end
+
           super(item)
         end
       end

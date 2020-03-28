@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'blocks/type_restricted_array'
 
 require_relative 'blocks/block'
